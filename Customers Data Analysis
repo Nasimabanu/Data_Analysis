@@ -1,0 +1,72 @@
+/* I have analyzed sales data of customers 
+eg- City, age, gender. Goal of this project is to get more insights of our data so,
+that marketing team identifies the efficiency 
+based on the data and information which we provided.
+*/
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv('BlackFriday.csv')
+df.shape
+df.describe()
+df.head()
+
+/* 1- Gender */
+
+explode = (0.1,0)
+fig1, ax1 = plt.subplots(figsize=(12,7))
+ax1.pie(df['Gender'].value_counts(), explode=explode,labels=['Male','Female'], autopct='%1.1f%%',
+       shadow=True, startangle=90)
+ax1.axis('equal')
+plt.tight_layout()
+plt.legend()
+plt.show()
+
+def plot(group, column, plot):
+   ax = plt.figure(figsize=(12, 6))
+   df.groupby(group)[column].sum().sort_values().plot(plot)
+
+   plot('Gender', 'Purchase', 'bar')
+   
+   /* Men's purchasing count is greater than women's purchasing count.About 75% of the customers have made sales in men’s category. */
+   
+/* 2-Age */
+
+fig1, ax1 = plt.subplots(figsize=(12,7))
+sns.countplot(df['Age'],hue=df['Gender'])
+
+plot('Age','Purchase','pie')
+
+/* we have achieved sales of more in the age group of 26-35 years */
+
+/* 3-City */
+
+explode = (0.1, 0, 0)
+fig1, ax1 = plt.subplots(figsize=(10,5))
+ax1.pie(df.groupby('City_Category')['Purchase'].sum(),explode=explode, labels=df['City_Category'].unique(), autopct='%1.1f%%',
+        startangle=90)
+# Equal aspect ratio ensures that pie is drawn as a circle
+ax1.axis('equal')
+plt.legend()
+plt.show()
+
+/* 4-Stability */
+
+labels=['First Year','Second Year','Third Year','More Than Four Years','Geust']
+explode = (0.1, 0.1,0,0,0)
+fig1, ax1 = plt.subplots(figsize=(12,7))
+ax1.pie(df.groupby('Stay_In_Current_City_Years')['Purchase'].sum(),explode=explode, labels=labels, autopct='%1.1f%%',
+       startangle=90)
+# Equal aspect ratio ensures that pie is drawn as a circle
+ax1.axis('equal')
+
+plt.legend()
+plt.show()
+
+ /* It indicates that people living more than two years have less purchase count. */
+
+
+
